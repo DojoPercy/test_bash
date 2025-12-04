@@ -9,6 +9,13 @@ interface CreateTodoRequest {
   status?: Status;
 }
 
+interface ListTodosRequest {
+  page?: number;
+  limit?: number;
+  status?: Status;
+  priority?: Priority;
+} 
+
 router.post('/', async (req: Request<{}, {}, CreateTodoRequest>, res: Response) => {
   try {
     const { title, priority = Priority.MEDIUM, status = Status.PENDING } = req.body;
@@ -74,6 +81,40 @@ router.delete('/:id', async (req: Request<{ id: string }>, res: Response) => {
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
+});
+
+router.get('/', async (req: Request<{}, {}, ListTodosRequest>, res: Response) => {
+  try {
+    const { page , limit = 10, status, priority } = req.query as unknown as ListTodosRequest;
+    
+    if(Number(page) < 1) {
+      return res.status(400).json({
+        success: false,
+        message: 'Page number must be greater than 0'
+      });
+    }
+     
+    const startIndex: number = (Number(page) - 1) * Number(limit);
+    
+    const endIndex = Number(page) * Number(limit);
+    
+    const todos = await Todo.find({status, priority}).skip(startIndex).limit(endIndex);
+
+    
+    
+    return res.status(200).json({
+      success: true,
+      message: 'Todos listed successfully',
+      data: todos
+    });
+  
+} catch (error) {
+  return res.status(500).json({
+    success: false,
+    message: 'Error listing todos',
+    error: error instanceof Error ? error.message : 'Unknown error'
+  });
+}
 });
 
 export default router;

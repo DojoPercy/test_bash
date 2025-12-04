@@ -4,10 +4,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import authRoutes from './routes/auth';
 import todoRoutes from './routes/todos';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/interview-app';
+const MONGODB_URI = 'process.env.MONGODB_URI '|| 'mongodb://localhost:27017/interview-app';
 
 app.use(helmet());
 app.use(cors());
