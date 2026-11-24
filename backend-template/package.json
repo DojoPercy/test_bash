@@ -4,9 +4,9 @@
   "description": "Backend template for fullstack interview",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": " tsx src/index.ts",
-    "build": "tsc",
+    "start": "node init && node dist/index.js",
+    "dev": "node init &&  tsx src/index.ts",
+    "build": "node init && tsc",
     "lint": "eslint src/**/*.ts",
     "typecheck": "tsc --noEmit"
   },
